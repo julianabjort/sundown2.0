@@ -11,7 +11,7 @@
 export default {
   data() {
     return {
-      component: 'StepOne',
+      component: 'StepThree',
     }
   },
 methods: {
@@ -23,7 +23,7 @@ methods: {
     }   else if (this.component === 'StepThree') {
         this.component = 'StepFour'
     }   else {
-        this.component = 'StepOne'
+        this.component = 'StepThree'
       }
     },
     goBack() {
