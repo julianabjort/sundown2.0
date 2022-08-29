@@ -1,14 +1,23 @@
 export const state = () => ({
-    title: "counter",
-    counter: 0,
+    missionName: '',
+    missionDesc: '',
+    missionDate: null,
+    selectedImages: [],
+
 });
 
 export const mutations = {
-    increment(state, newValue) {
-        state.counter+=newValue;
+    setMissionName(state, payload) {
+        state.missionName = payload.missionName
     },
-    decrement(state, newValue) {
-        state.counter-=newValue;
+    setMissionDesc(state, payload) {
+        state.missionDesc = payload.missionDesc
+    },
+    setMissionDate(state, payload) {
+        state.missionDate = payload.missionDate
+    },
+    setSelectedImages(state, payload) {
+        state.selectedImages = payload.selectedImages
     }
 }
 

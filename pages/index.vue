@@ -13,7 +13,7 @@
       </p>
         <label for="email" class="text-xs uppercase mt-2">E-mail</label>
 
-        <input id="email" name="email" type="text" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2" placeholder="E-mail">
+        <input id="email" name="email" type="email" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2" placeholder="E-mail">
         
         <label for="password" class="text-xs uppercase mt-2">Password</label>
 
@@ -27,13 +27,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import users from "../assets/data/users.json";
 
-export default {
-  
+export default { 
+  mounted() {
+    if (this.user) {
+    this.$router.push('/dashboard');
+  } 
+  },
+
   data() {
     return {
+      user: this.$cookies.get('user'),
       errors: [],
       users,
       input: {
@@ -43,13 +48,21 @@ export default {
     }
   },
   methods: {
+    
     login() {
       this.checkForm()
+      this.errors = [];
   
       for (let i = 0; i < users.length; i++) {
           if(this.input.email == users[i].email && this.input.password == users[i].password)  {
-              this.$cookies.set('user', this.users[i])
-              this.$router.push('/dashboard');
+            this.$cookies.set('user', this.users[i])
+            this.$router.push('/dashboard');
+          } else if((this.input.email !== users[i].email)){
+            this.errors.push('Email does not exist.');
+            this.errors.splice(1)
+          } else if((this.input.email == users[i].email && this.input.password !== users[i].password)){
+            this.errors.push('Wrong password.');
+            this.errors.splice(1)
           }
       }      
   },
@@ -64,7 +77,7 @@ export default {
       }
       if (!this.input.password) {
         this.errors.push('Password required.');
-      }
+      } 
   },
   },
 }

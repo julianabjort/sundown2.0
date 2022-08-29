@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'test',
+    title: 'sundown2.0',
     htmlAttrs: {
       lang: 'en'
     },
@@ -37,8 +37,18 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     'cookie-universal-nuxt',
+    '@nuxt/http',
+    ['nuxt-lazy-load', {
+      directiveOnly: true
+    }],
+    ['nuxt-gmaps', {
+      key: 'AIzaSyCMtVIHGoRz37uflqwW1oX88frAOnBBeZA',
+      //you can use libraries: ['places']
+    }]
   ],
-
+  http: {
+    // proxyHeaders: false
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     postcss: {
@@ -49,3 +59,4 @@ export default {
     },
   }
 }
+
