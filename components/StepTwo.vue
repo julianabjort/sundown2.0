@@ -34,10 +34,13 @@
                     >
                 </div>
         </div>
-        <slot/>
+        <slot name="nextButton"/>
     </div>
-    
+     
 </div>
+<div class="absolute left-10 bottom-10">
+        <slot name="backButton"/>
+    </div>
 </div>
   
 </template>

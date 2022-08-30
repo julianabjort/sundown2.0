@@ -15,16 +15,14 @@
         <div class="w-1/2">
             <p>Mission start date:</p>
             <div>
-                
                 <date-picker v-model="missionDate" type="date"></date-picker>
-                
             </div>
-           <slot />
+           <slot name="nextButton"/>
         </div>
     </div>
 
     <div class="absolute left-10 bottom-20">
-        <button class="btn-primary">Close X</button>
+        <slot @click.native="saveInfo(missionName, missionDesc, missionDate);" name="backButton"/>
     </div>
 </div>
     
@@ -37,13 +35,15 @@
 
   export default {
     components: { DatePicker },
-    data() {
-      return {
-        // missionName:'',
-        // missionDesc:'',
-        // missionDate: null,
-      };
+    
+    methods: {
+        saveInfo(name, desc, date) {
+            this.missionName = name
+            this.missionDesc = desc
+            this.missionDate = date
+        }, 
     },
+
     computed: {
         missionName: {
             get() {

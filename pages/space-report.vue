@@ -1,8 +1,8 @@
 <template>
 <div>
     <component :is="component">
-      <button @click="goBack" class="btn-primary" name="backButton">Back</button>
-      <button @click="toggleComponents" class="btn-primary" name="nextButton">Next step</button>
+      <button @click="previousComponent" class="btn-primary bg-black" slot="backButton">Back</button>
+      <button @click="nextComponent" class="btn-primary bg-black" slot="nextButton">Next step</button>
     </component>
 </div>
 </template>
@@ -11,11 +11,11 @@
 export default {
   data() {
     return {
-      component: 'StepThree',
+      component: 'StepOne',
     }
   },
 methods: {
-    toggleComponents() {
+    nextComponent() {
         if (this.component === 'StepOne') {
         this.component = 'StepTwo'
     }   else if (this.component === 'StepTwo') {
@@ -23,10 +23,10 @@ methods: {
     }   else if (this.component === 'StepThree') {
         this.component = 'StepFour'
     }   else {
-        this.component = 'StepThree'
+        this.component = 'StepOne'
       }
     },
-    goBack() {
+    previousComponent() {
     if (this.component === 'StepOne') {
         this.$router.push('/dashboard');
     }   else if (this.component === 'StepTwo') {

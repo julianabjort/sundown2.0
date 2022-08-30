@@ -19,7 +19,7 @@
 
         <input type="password" id="password" name="password" v-model="input.password" class="border-[0.5px] border-black rounded-md pl-2" placeholder="Password">
 
-        <button @click.prevent="login" class="btn-primary">Login</button>
+        <button @click.prevent="login" class="btn-primary bg-black">Login</button>
       </form>
     </div>
     
@@ -57,6 +57,7 @@ export default {
           if(this.input.email == users[i].email && this.input.password == users[i].password)  {
             this.$cookies.set('user', this.users[i])
             this.$router.push('/dashboard');
+            console.log(this.users[i])
           } else if((this.input.email !== users[i].email)){
             this.errors.push('Email does not exist.');
             this.errors.splice(1)
@@ -80,6 +81,7 @@ export default {
       } 
   },
   },
+
 }
 
 </script>
