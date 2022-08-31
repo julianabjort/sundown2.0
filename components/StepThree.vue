@@ -84,12 +84,12 @@ export default {
         this.saveLong(this.longitude)
 
     },
-    cancelAutoUpdate() {  
-        clearInterval(this.timer);  
-    },  
-    beforeDestroy() {  
-        this.cancelAutoUpdate();  
-    },  
+    // cancelAutoUpdate() {  
+    //     clearInterval(this.timer);  
+    // },  
+    // beforeDestroy() {  
+    //     this.cancelAutoUpdate();  
+    // },  
     saveLat(latitude) {
         this.missionLat = latitude 
     },

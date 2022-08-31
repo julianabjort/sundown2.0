@@ -1,5 +1,6 @@
 export const state = () => ({
     userId: null,
+    reportId: '',
     missionName: '',
     missionDesc: '',
     missionDate: null,
@@ -7,11 +8,15 @@ export const state = () => ({
     missionLat: null,
     missionLong: null
 
+
 });
 
 export const mutations = {
     setUserId(state, payload) {
         state.userId = payload.userId
+    },
+    setReportId(state, payload) {
+        state.reportId = payload.reportId
     },
     setMissionName(state, payload) {
         state.missionName = payload.missionName

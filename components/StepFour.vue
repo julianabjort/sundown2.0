@@ -8,8 +8,6 @@
      <div class="flex mx-48 space-x-20">
         <div class="w-1/2">
             <div class="w-full h-auto">
-                <h3 class="heading-3">User ID</h3>
-                <p>{{ report.userId }}</p>
                 
                 <h3 class="heading-3">Mission Name</h3>
                 <p>{{ report.missionName }}</p>
@@ -52,6 +50,14 @@ export default {
         finaliseReport() {
             let userReports = JSON.parse(localStorage.getItem("userReports"));
             if(userReports == null) userReports = [];
+
+            for (let i = 0; i < userReports.length; i++) {
+                if(this.report.reportId == userReports[i].reportId)  {
+                console.log("REPORT EXISTS")
+                userReports = userReports.filter(report => report.reportId !== this.report.reportId)   
+            }
+            }
+            
             userReports.push(this.report)
             localStorage.setItem('userReports', JSON.stringify(userReports))
             this.$router.push('/dashboard');

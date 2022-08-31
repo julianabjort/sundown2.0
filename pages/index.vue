@@ -58,7 +58,10 @@ export default {
             this.$cookies.set('user', this.users[i])
             this.$router.push('/dashboard');
             console.log(this.users[i])
-          } else if((this.input.email !== users[i].email)){
+            break;
+          } 
+          
+          if((this.input.email !== users[i].email)){
             this.errors.push('Email does not exist.');
             this.errors.splice(1)
           } else if((this.input.email == users[i].email && this.input.password !== users[i].password)){

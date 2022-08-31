@@ -8,7 +8,7 @@
      <div class="flex mx-48 space-x-20">
         <div class="w-1/2">
             <h3 class="heading-3">Space mission image bank</h3>
-            <div class="w-full h-[460px] border-2 flex flex-wrap justify-around overflow-auto">
+            <div class="w-full h-96 border-2 flex flex-wrap justify-around overflow-auto">
                 
                 <p v-if="$fetchState.pending">Fetching images...</p>
                 <p v-else-if="$fetchState.error">An error occurred :(</p>
@@ -25,7 +25,7 @@
         </div>
         <div class="w-1/2">
             <h3 class="heading-3">Selected images to report</h3>
-            <div class="w-full h-[460px] border-2 flex flex-wrap justify-around overflow-auto">
+            <div class="w-full h-96 border-2 flex flex-wrap justify-around overflow-auto">
                 <div v-for="image in selectedImages" :key="image.id">
                     <img
                     class="rounded-sm h-36 w-36 m-1" 
