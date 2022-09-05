@@ -1,9 +1,5 @@
 <template>
-
 <div>
-    <div class="text-center my-10">
-        <h1 class="heading-1">MRT</h1>
-    </div>
     <div class="flex mx-48 space-x-20">
         <div class="w-2/3">
             <h3 class="heading-3">Current position over earth</h3>
@@ -13,18 +9,12 @@
                     ref="gMap"
                     language="en"
                     :center="{lat: latitude, lng: longitude}"
-                    :options="{fullscreenControl: false}"
                     :zoom="6"
                     >
                     <GMapMarker
-                        v-for="position in positions"
-                        :key="position.latitude"
-                        :position="{lat: position.latitude, lng: position.longitude}"
-                        :options="{icon: position === currentLocation ? pins.selected : pins.notSelected}"
-                        @click="currentLocation = position"
-                    >
+                    :position="{lat: latitude, lng: longitude}"
+                    > 
                     </GMapMarker>
-                    
                     </GMap>
             </div>
         </div>
@@ -34,16 +24,16 @@
                 <p>{{ latitude }}</p>
                 </div>
             <h4 class="heading-4">Long:</h4>
-            <div class="w-full h-10 border-2">
+            <div class="w-full h-10 border-2 mb-4">
                 <p>{{ longitude }}</p>
                 </div>
-        <slot name="nextButton"/>
-        
+
+        <NuxtLink to="/finalise" class="btn-primary bg-black">Next step</NuxtLink>
     </div>
     
 </div>
-<div class="absolute left-10 bottom-10">
-        <slot name="backButton"/>
+ <div class="absolute left-10 bottom-20">
+        <NuxtLink to="/images" class="btn-primary bg-black">Back</NuxtLink>
     </div>
 </div>
   
@@ -51,11 +41,19 @@
 
 <script>
 export default {
+    layout: 'flowLayout',
     created() {
         this.fetchData()
         // this.timer = setInterval(this.fetchData, 60000)
 
+        if (this.$store.state.missionName == '' 
+        || this.$store.state.missionDesc == '' 
+        || this.$store.state.missionDate == null
+        || this.$store.state.selectedImages == []) {
+            this.$router.push('/details')
+        }
     },
+    
     data() {
       return {
         positions: [],

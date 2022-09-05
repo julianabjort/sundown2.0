@@ -39,7 +39,7 @@ export default {
     'cookie-universal-nuxt',
     '@nuxt/http',
     ['nuxt-lazy-load', {
-      directiveOnly: true
+      images: true
     }],
     ['nuxt-gmaps', {
       key: 'AIzaSyCMtVIHGoRz37uflqwW1oX88frAOnBBeZA',

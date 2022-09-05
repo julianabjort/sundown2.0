@@ -16,7 +16,7 @@
                   <h3 class="heading-3 text-white">{{ report.missionName }}</h3>
                   
                   <div class="flex space-x-2">
-                    <NuxtLink to="/space-report">
+                    <NuxtLink to="/details">
                     <button @click="editReport(report.userId, report.missionName, report.missionDesc, report.missionDate, report.missionLat, report.missionLong, report.selectedImages, report.reportId)" class="btn-primary bg-blue-500">Edit</button>
                     </NuxtLink>
                     <button @click="deleteReport(report.reportId)" class="btn-primary bg-red-500">Delete</button>
@@ -26,9 +26,7 @@
             </div>
         </div>
         <div class="w-1/2">
-            <NuxtLink to="/space-report">
-              <button @click="createId" class="btn-primary bg-black">+ Create new Space report</button>
-            </NuxtLink>
+              <NuxtLink to="/details" class="btn-primary bg-black my-10">+ Create new Space report</NuxtLink>
             <h3 class="heading-3">Fun space facts</h3>
             <p>There is so much about space, our solar system, and the galaxy that we still don't know!  Space is vast. With billions of galaxies and stars, and planets in our own solar system yet to be fully explored or understood, scientists' knowledge of space is always evolving.  There are, however, some really cool things we know about space right now!  We've compiled a list of what we think are ten stellar facts that we hope you'll think are out of this world!</p>
         </div>
@@ -68,12 +66,7 @@ methods: {
     this.$cookies.remove('user')
     this.$router.push('/');
   },
-  createId() {
-    this.userId = this.user.id
-    this.reportId = Math.random().toString(16).slice(2)
-  }, 
   deleteReport(id) {
-    // this.userReports.splice(this.userReports.findIndex(item => item.reportId === id), 1)
     this.userReports = this.userReports.filter(item => item.reportId !== id)
     localStorage.setItem('userReports', JSON.stringify(this.userReports));
   },
@@ -141,9 +134,6 @@ computed: {
               if (this.selectedImages.length < 7){
               this.$store.commit('setSelectedImages', {selectedImages: value})
           }
-          else {
-              alert("maximum 7 images allowed")
-          }
         }
       },
     missionLat: {
@@ -164,10 +154,6 @@ computed: {
     },
 
 },
-  
-  
-
-
 components: {
   MdPowerIcon
 }

@@ -4,7 +4,7 @@
 
       <h1 class="text-3xl font-bold text-center">MRT</h1>
 
-      <form id="login" action="">
+      <form id="login" action="" novalidate="true">
 
         <p v-if="errors.length">
         <ul>
@@ -17,7 +17,7 @@
         
         <label for="password" class="text-xs uppercase mt-2">Password</label>
 
-        <input type="password" id="password" name="password" v-model="input.password" class="border-[0.5px] border-black rounded-md pl-2" placeholder="Password">
+        <input type="password" id="password" name="password" v-model="input.password" class="border-[0.5px] border-black rounded-md pl-2 mb-4" placeholder="Password">
 
         <button @click.prevent="login" class="btn-primary bg-black">Login</button>
       </form>
@@ -52,12 +52,11 @@ export default {
     login() {
       this.checkForm()
       this.errors = [];
-  
+
       for (let i = 0; i < users.length; i++) {
           if(this.input.email == users[i].email && this.input.password == users[i].password)  {
             this.$cookies.set('user', this.users[i])
             this.$router.push('/dashboard');
-            console.log(this.users[i])
             break;
           } 
           
@@ -69,20 +68,26 @@ export default {
             this.errors.splice(1)
           }
       }      
-  },
+    },
     checkForm() {
       this.errors = [];
-
-      if (this.input.email && this.input.password) {
-        return true;
-      }
       if (!this.input.email) {
         this.errors.push('Email required.');
+
+      } else if (!this.validEmail(this.input.email)) {
+        this.errors.push('Valid email required.');
       }
       if (!this.input.password) {
         this.errors.push('Password required.');
       } 
+      if (!this.errors.length) {
+        return true;
+      }
   },
+      validEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
   },
 
 }
