@@ -44,7 +44,7 @@ export default {
     layout: 'flowLayout',
     created() {
         this.fetchData()
-        // this.timer = setInterval(this.fetchData, 60000)
+        // this.timer = setInterval(this.fetchData, 5000)
 
         if (this.$store.state.missionName == '' 
         || this.$store.state.missionDesc == '' 
@@ -54,7 +54,7 @@ export default {
         }
     },
     
-    data() {
+    data() { 
       return {
         positions: [],
         latitude: null,

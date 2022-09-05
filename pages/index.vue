@@ -50,45 +50,29 @@ export default {
   methods: {
     
     login() {
-      this.checkForm()
       this.errors = [];
-
-      for (let i = 0; i < users.length; i++) {
-          if(this.input.email == users[i].email && this.input.password == users[i].password)  {
-            this.$cookies.set('user', this.users[i])
-            this.$router.push('/dashboard');
-            break;
-          } 
-          
-          if((this.input.email !== users[i].email)){
-            this.errors.push('Email does not exist.');
-            this.errors.splice(1)
-          } else if((this.input.email == users[i].email && this.input.password !== users[i].password)){
-            this.errors.push('Wrong password.');
-            this.errors.splice(1)
-          }
-      }      
-    },
-    checkForm() {
-      this.errors = [];
-      if (!this.input.email) {
-        this.errors.push('Email required.');
-
-      } else if (!this.validEmail(this.input.email)) {
+      const user = users.find(user => user.email == this.input.email && user.password == this.input.password)
+      
+      if (!this.input.email || !this.input.password) {
+        this.errors.push('Email and/or password required.')
+        }
+      else if (!this.validEmail(this.input.email)) {
         this.errors.push('Valid email required.');
       }
-      if (!this.input.password) {
-        this.errors.push('Password required.');
+      else if(user == undefined)  {
+        this.errors.push("Wrong credentials")
       } 
-      if (!this.errors.length) {
-        return true;
-      }
-  },
+      else {
+        this.$cookies.set('user', user)
+        this.$router.push('/dashboard');
+        }  
+    },
       validEmail(email) {
         var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
     }
   },
+
 
 }
 

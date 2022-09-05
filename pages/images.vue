@@ -10,11 +10,11 @@
                 <p v-if="$fetchState.pending">Fetching images...</p>
                 <p v-else-if="$fetchState.error">An error occurred :(</p>
 
-                <div v-else v-for="image in images.photos" :key="image.title" class="w-full">
+                <div v-else v-for="image in images" :key="image.title" class="w-full">
                     <img
                     class="rounded-md h-36 w-full cursor-pointer" 
-                    :src="image.img_src" alt=""
-                    @click="selectImage(image.img_src)"
+                    :src="image.image" alt=""
+                    @click="selectImage(image.image)"
                     >
                 </div>
                 </div>
@@ -63,7 +63,7 @@ export default {
     },
     async fetch() {
       this.images = await fetch(
-        'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=DEMO_KEY&sol=15'
+        'https://api.nuxtjs.dev/mountains'
       ).then(res => res.json())
       
     },
