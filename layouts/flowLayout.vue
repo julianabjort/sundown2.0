@@ -1,46 +1,91 @@
 <template>
-<div>
+  <div>
     <div class="text-center my-10">
-        <NuxtLink to="/dashboard" class="heading-1">MRT</NuxtLink>
+      <NuxtLink to="/dashboard" class="heading-1">MRT</NuxtLink>
     </div>
     <div class="flex w-full mb-10 mx-48 items-center">
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        1
+      </p>
 
-        <p class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold">1</p>
+      <div
+        class="w-1/5 h-1 line1"
+        :class="
+          isImagesPage || isLocationPage || isFinalPage
+            ? 'bg-black'
+            : 'bg-white'
+        "
+      ></div>
 
-        <div class="w-1/5 h-1" :class="isImagesPage || isLocationPage || isFinalPage ? 'bg-black' : 'bg-white'"></div>
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        2
+      </p>
 
-        <p class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold">2</p>
+      <div
+        class="w-1/5 h-1 line2"
+        :class="isLocationPage || isFinalPage ? 'bg-black' : 'bg-white'"
+      ></div>
 
-        <div class="w-1/5 h-1" :class="isLocationPage || isFinalPage ? 'bg-black' : 'bg-white'"></div>
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        3
+      </p>
 
-        <p class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold">3</p>
+      <div
+        class="w-1/5 h-1 line3"
+        :class="isFinalPage ? 'bg-black' : 'bg-white'"
+      ></div>
 
-        <div class="w-1/5 h-1" :class="isFinalPage ? 'bg-black' : 'bg-white'"></div>
-
-        <p class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold">4</p>
-
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        4
+      </p>
     </div>
     <NuxtChild />
-</div>
-  
+  </div>
 </template>
 
 <script>
 export default {
-
-computed: {
+  watch: {
+    $route(to, from) {
+      if (to.name === "images" && from.name === "details") {
+        this.animateForward(".line1");
+      }
+      if (to.name === "location" && from.name === "images") {
+        this.animateForward(".line2");
+      }
+      if (to.name === "finalise" && from.name === "location") {
+        this.animateForward(".line3");
+      }
+    },
+  },
+  methods: {
+    animateForward(line) {
+      this.$gsap.fromTo(
+        line,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 2, scaleX: 1, ease: "expo" }
+      );
+    },
+  },
+  computed: {
     isImagesPage() {
-        return this.$route.path === '/images'
+      return this.$route.path === "/images";
     },
     isLocationPage() {
-        return this.$route.path === '/location'
+      return this.$route.path === "/location";
     },
     isFinalPage() {
-        return this.$route.path === '/finalise'
+      return this.$route.path === "/finalise";
     },
-
-}
-
-}
+  },
+};
 </script>
 

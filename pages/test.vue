@@ -1,60 +1,48 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold">
-      Counter
-      {{ fullName }}
-    </h1>
-    <div>
-      <p class="text-2xl font-bold my-4">{{ counter }}</p>
-      <button @click="increment" class="px-4 py-2 bg-purple-300 rounded-full">Increment</button>
-      <button @click="decrement" class="px-4 py-2 bg-purple-300 rounded-full">Decrement</button>
+    <div class="m-20 flex items-center">
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        1
+      </p>
+      <div class="line w-1/5 h-1 bg-black"></div>
+
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        2
+      </p>
+      <div class="w-1/5 h-1 bg-black"></div>
+
+      <p
+        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+      >
+        3
+      </p>
     </div>
-    <ul>
-      <li v-for="user in users" :key="user.id">
-         {{user.first_name}}
-       </li>
-    </ul>
-    <div><input v-model="value" v-on:update="changeHandler" type="text" class="border-2">
-      {{ value }}
-    </div>
+    <button @click="setRotationOnClick" class="ml-20 btn-primary bg-black">
+      CLICK ME
+    </button>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import users from "../assets/data/users.json";
-
 export default {
-  data() {
-    return {
-      firstName: 'Juliana',
-      lastName: 'Ivarsdottir',
-      users,
-      value: ''
-    }
+  mounted() {
+    // this.setRotationOnLoad();
   },
   methods: {
-    increment() {
-      this.$store.commit('increment', 10)
+    setRotationOnClick() {
+      this.$gsap.fromTo(
+        ".line",
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 1, scaleX: 1, ease: "expo" }
+      );
     },
-    decrement() {
-      this.$store.commit('decrement', 10)
-    }
+    // setRotationOnLoad() {
+    //   this.$gsap.to(".title1", { rotation: 27, x: 300, duration: 1 });
+    // },
   },
-  watch: {
-        value() {
-            console.log(this.value)
-        },
-        },
-  computed: {
-    fullName() {
-      return this.firstName + this.lastName
-    }, 
-    ...mapGetters([
-      'counter',
-    ])
-  }
-
-}
-
+};
 </script>

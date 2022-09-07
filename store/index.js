@@ -1,4 +1,6 @@
-export const state = () => ({
+
+const defaultState = () => {
+    return {
     userId: null,
     reportId: '',
     missionName: '',
@@ -7,9 +9,10 @@ export const state = () => ({
     selectedImages: [],
     missionLat: null,
     missionLong: null
+    }
+}
 
-
-});
+export const state = defaultState()
 
 export const mutations = {
     setUserId(state, payload) {
@@ -35,9 +38,22 @@ export const mutations = {
     },
     setMissionLong(state, payload) {
         state.missionLong = payload.missionLong
+    },
+    set(state, {key, value}) {
+        state[key] = value 
+    },
+    reset(state) {
+        Object.assign(state, defaultState())
     }
+
 }
 
 export const getters = {
-    counter: (state) => state.counter
+    missionName: (state) => state.missionName,
+    missionDesc: (state) => state.missionDesc,
+    missionDate: (state) => state.missionDate,
+    selectedImages: (state) => state.selectedImages,
+    missionLat: (state) => state.missionLat,
+    missionLong: (state) => state.missionLong,
+
 }

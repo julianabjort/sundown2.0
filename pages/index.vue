@@ -29,51 +29,49 @@
 <script>
 import users from "../assets/data/users.json";
 
-export default { 
+export default {
   mounted() {
     if (this.user) {
-    this.$router.push('/dashboard');
-  } 
+      this.$router.push("/dashboard");
+    }
   },
 
   data() {
     return {
-      user: this.$cookies.get('user'),
+      user: this.$cookies.get("user"),
       errors: [],
       users,
       input: {
-        email: '',
-        password: ''
-      }
-    }
+        email: "",
+        password: "",
+      },
+    };
   },
   methods: {
-    
     login() {
       this.errors = [];
-      const user = users.find(user => user.email == this.input.email && user.password == this.input.password)
-      
+      const user = users.find(
+        (user) =>
+          user.email === this.input.email &&
+          user.password === this.input.password
+      );
+
       if (!this.input.email || !this.input.password) {
-        this.errors.push('Email and/or password required.')
-        }
-      else if (!this.validEmail(this.input.email)) {
-        this.errors.push('Valid email required.');
+        this.errors.push("Email and/or password required.");
+      } else if (!this.validEmail(this.input.email)) {
+        this.errors.push("Valid email required.");
+      } else if (user == undefined) {
+        this.errors.push("Wrong credentials");
+      } else {
+        this.$cookies.set("user", user);
+        this.$router.push("/dashboard");
       }
-      else if(user == undefined)  {
-        this.errors.push("Wrong credentials")
-      } 
-      else {
-        this.$cookies.set('user', user)
-        this.$router.push('/dashboard');
-        }  
     },
-      validEmail(email) {
-        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    validEmail(email) {
+      var re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
-    }
+    },
   },
-
-
-}
-
+};
 </script>
