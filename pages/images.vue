@@ -1,9 +1,20 @@
 <template>
   <div>
-    <div class="flex mx-48 space-x-20">
+    <div
+      class="
+        flex
+        mx-6
+        md:mx-20
+        lg:mx-48
+        space-x-4
+        sm:space-x-8
+        md:space-x-10
+        lg:space-x-20
+      "
+    >
       <div class="w-1/2">
-        <h3 class="heading-3">Space mission image bank</h3>
-        <div class="h-96 border-2 rounded-md overflow-auto">
+        <h3 class="text-xs uppercase mb-2">Image Bank</h3>
+        <div class="h-[500px] md:h-96 border-2 rounded-md overflow-auto">
           <div
             class="
               w-full
@@ -27,7 +38,13 @@
               class="w-full"
             >
               <img
-                class="rounded-md h-36 w-full cursor-pointer"
+                class="
+                  rounded-md
+                  aspect-square
+                  w-full
+                  cursor-pointer
+                  object-cover
+                "
                 :src="image.image"
                 alt=""
                 @click="selectImage(image.image)"
@@ -35,10 +52,16 @@
             </div>
           </div>
         </div>
+
+        <div class="md:hidden">
+          <NuxtLink to="/details">
+            <button class="btn-primary w-full bg-black my-4">Back</button>
+          </NuxtLink>
+        </div>
       </div>
       <div class="w-1/2">
-        <h3 class="heading-3">Selected images to report</h3>
-        <div class="h-96 border-2 rounded-md overflow-auto">
+        <h3 class="text-xs uppercase mb-2">Selected Images</h3>
+        <div class="h-[500px] md:h-96 border-2 rounded-md overflow-auto">
           <div
             class="
               w-full
@@ -54,7 +77,13 @@
           >
             <div v-for="image in selectedImages" :key="image.id" class="w-full">
               <img
-                class="rounded-md h-36 w-full cursor-pointer"
+                class="
+                  rounded-md
+                  w-full
+                  cursor-pointer
+                  object-cover
+                  aspect-square
+                "
                 :src="image"
                 alt=""
                 @click="removeImage(image)"
@@ -62,7 +91,10 @@
             </div>
           </div>
         </div>
-        <button @click="checkImages" class="btn-primary bg-black my-4">
+        <button
+          @click="checkImages"
+          class="btn-primary bg-black my-4 w-full md:w-auto"
+        >
           Next step
         </button>
 
@@ -73,7 +105,7 @@
         </div>
       </div>
     </div>
-    <div class="absolute left-10 bottom-20">
+    <div class="hidden md:inline absolute left-10 bottom-10">
       <NuxtLink to="/details" class="btn-link bg-black">Back</NuxtLink>
     </div>
   </div>
@@ -83,13 +115,13 @@
 export default {
   layout: "FlowLayout",
 
-  created() {
+  middleware({ store, redirect }) {
     if (
-      this.$store.state.missionName == "" ||
-      this.$store.state.missionDesc == "" ||
-      this.$store.state.missionDate == ""
+      store.state.missionName === "" ||
+      store.state.missionDesc == "" ||
+      store.state.missionDate == null
     ) {
-      this.$router.push("/details");
+      return redirect("/details");
     }
   },
   data() {
@@ -114,6 +146,7 @@ export default {
       );
     },
     checkImages() {
+      this.errors = [];
       if (this.selectedImages.length) {
         this.$router.push("/location");
       } else {

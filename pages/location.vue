@@ -1,26 +1,36 @@
 <template>
   <div>
-    <div class="flex mx-48 space-x-20">
-      <div class="w-2/3">
-        <h3 class="heading-3">Current position over earth</h3>
-        <div class="w-full h-auto border-2">
+    <div class="md:flex mx-6 md:mx-20 lg:mx-48 md:space-x-10 lg:space-x-20">
+      <div class="md:w-1/2">
+        <h3 class="text-xs uppercase mb-2">Current position</h3>
+        <div class="w-full h-auto border-2 rounded-md">
           <div id="map" class="h-96"></div>
         </div>
       </div>
-      <div class="w-1/3">
-        <h4 class="heading-4">Lat:</h4>
-        <div class="w-full h-10 border-2">
+      <div class="md:w-1/2">
+        <h4 class="text-xs uppercase mb-1 mt-6">Latitude</h4>
+        <div class="w-full md:w-2/3 h-10 rounded-md border-2">
           <p>{{ latitude }}</p>
         </div>
-        <h4 class="heading-4">Long:</h4>
-        <div class="w-full h-10 border-2 mb-4">
+        <h4 class="text-xs uppercase mb-1 mt-6">Longitude</h4>
+        <div class="w-full md:w-2/3 h-10 border-2 rounded-md mb-4">
           <p>{{ longitude }}</p>
         </div>
-
-        <NuxtLink to="/finalise" class="btn-link bg-black">Next step</NuxtLink>
+        <div class="flex space-x-4 md:space-x-0">
+          <div class="md:hidden w-1/2">
+            <NuxtLink to="/images">
+              <button class="btn-primary w-full bg-black">Back</button>
+            </NuxtLink>
+          </div>
+          <NuxtLink to="/finalise" class="w-1/2">
+            <button class="btn-primary w-full md:w-auto bg-black">
+              Next step
+            </button>
+          </NuxtLink>
+        </div>
       </div>
     </div>
-    <div class="absolute left-10 bottom-20">
+    <div class="hidden md:inline absolute left-10 bottom-10">
       <NuxtLink to="/images" class="btn-link bg-black">Back</NuxtLink>
     </div>
   </div>
@@ -33,18 +43,20 @@ import "mapbox-gl/dist/mapbox-gl.css";
 export default {
   layout: "FlowLayout",
 
+  middleware({ store, redirect }) {
+    if (
+      store.state.missionName === "" ||
+      store.state.missionDesc == "" ||
+      store.state.missionDate == null ||
+      store.state.selectedImages == []
+    ) {
+      return redirect("/details");
+    }
+  },
+
   created() {
     this.fetchData();
     this.timer = setInterval(this.fetchData, 60000);
-
-    if (
-      this.$store.state.missionName == "" ||
-      this.$store.state.missionDesc == "" ||
-      this.$store.state.missionDate == null ||
-      this.$store.state.selectedImages == []
-    ) {
-      this.$router.push("/details");
-    }
   },
 
   beforeDestroy() {
@@ -70,10 +82,6 @@ export default {
       this.createMap();
       this.setMapCenter();
       this.setMarker();
-      //   const marker = new mapboxgl.Marker();
-
-      //   marker.setLngLat([this.longitude, this.latitude]);
-      //   marker.addTo(this.map);
     },
 
     saveLat(latitude) {

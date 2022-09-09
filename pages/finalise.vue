@@ -1,53 +1,66 @@
 <template>
   <div>
-    <div class="flex mx-48 space-x-20">
-      <div class="w-1/2">
-        <div class="w-full h-auto">
-          <h3 class="heading-3">Mission Name</h3>
+    <div class="mx-6 md:flex md:mx-48 md:space-x-20">
+      <div class="md:w-1/3">
+        <div class="w-full h-auto mb-4">
+          <h3 class="heading-bold">Mission Name</h3>
           <p>{{ missionName }}</p>
 
-          <h3 class="heading-3">Mission Description</h3>
+          <h3 class="heading-bold">Mission Description</h3>
           <p>{{ missionDesc }}</p>
 
-          <h3 class="heading-3">Mission Start Date</h3>
+          <h3 class="heading-bold">Mission Start Date</h3>
           <p>{{ getFormattedDate(missionDate) }}</p>
 
-          <h3 class="heading-3">Lat</h3>
+          <h3 class="heading-bold">Lat</h3>
           <p>{{ missionLat }}</p>
 
-          <h3 class="heading-3">Long</h3>
+          <h3 class="heading-bold">Long</h3>
           <p>{{ missionLong }}</p>
         </div>
       </div>
-      <div class="w-1/2 text-center">
-        <div class="h-96 border-2 rounded-md overflow-auto">
+      <div class="md:w-1/2 text-center">
+        <div class="h-auto md:h-96 border-2 rounded-md overflow-auto">
           <div
             class="
               w-full
               h-auto
               p-2
-              grid grid-cols-1
-              md:grid-cols-2
+              grid grid-cols-2
               lg:grid-cols-3
               gap-2
               grid-rows-auto
-              mb-4
             "
           >
             <div v-for="image in selectedImages" :key="image.id">
-              <img class="rounded-md w-full h-36" :src="image" />
+              <img
+                class="
+                  grid grid-cols-2
+                  rounded-md
+                  w-full
+                  object-cover
+                  aspect-square
+                "
+                :src="image"
+              />
             </div>
           </div>
         </div>
-        <button
-          @click="
-            finaliseReport();
-            resetState();
-          "
-          class="btn-primary bg-black mt-4"
-        >
-          Finalise Report
-        </button>
+        <div class="flex space-x-4">
+          <div class="md:hidden w-1/2">
+            <NuxtLink to="/location">
+              <button class="btn-primary w-full bg-black mt-4">Back</button>
+            </NuxtLink>
+          </div>
+
+          <button
+            @click="finaliseReport"
+            class="btn-primary w-1/2 mt-4 md:w-auto bg-black"
+          >
+            Finalise Report
+          </button>
+        </div>
+
         <div v-if="errors">
           <p class="text-red-500" v-for="error in errors" :key="error.id">
             {{ error }}
@@ -55,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="absolute left-10 bottom-20">
+    <div class="hidden md:inline absolute left-10 bottom-20">
       <NuxtLink to="/location" class="btn-link bg-black">Back</NuxtLink>
     </div>
   </div>
@@ -67,18 +80,19 @@ import { mapGetters } from "vuex";
 export default {
   layout: "FlowLayout",
 
-  created() {
+  middleware({ store, redirect }) {
     if (
-      this.missionName == "" ||
-      this.missionDesc == "" ||
-      this.missionDate == null ||
-      this.selectedImages == [] ||
-      this.missionLat == null ||
-      this.missionLong == null
+      store.state.missionName === "" ||
+      store.state.missionDesc == "" ||
+      store.state.missionDate == null ||
+      store.state.selectedImages == [] ||
+      store.state.missionDate == null ||
+      store.state.missionDate == null
     ) {
-      this.$router.push("/details");
+      return redirect("/details");
     }
   },
+
   data() {
     return {
       errors: [],
@@ -89,9 +103,6 @@ export default {
       return moment(date).format("dddd, MMMM Do YYYY");
     },
 
-    resetState() {
-      this.$store.commit("reset");
-    },
     finaliseReport() {
       this.errors = [];
       let userReports = JSON.parse(localStorage.getItem("userReports"));

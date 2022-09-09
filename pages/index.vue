@@ -1,8 +1,10 @@
 <template>
   <div class="flex justify-center align-center">
-    <div class="flex flex-col w-48">
+    <div class="flex flex-col w-56">
 
-      <h1 class="text-3xl font-bold text-center">MRT</h1>
+      <img class="w-48 mt-16" src="../assets/images/logo.png" alt="logo">
+
+      <h1 class="heading-1 text-center">MRT</h1>
 
       <form id="login" action="" novalidate="true">
 
@@ -13,13 +15,13 @@
       </p>
         <label for="email" class="text-xs uppercase mt-2">E-mail</label>
 
-        <input id="email" name="email" type="email" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2" placeholder="E-mail">
+        <input id="email" name="email" type="email" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2 w-full" placeholder="E-mail">
         
         <label for="password" class="text-xs uppercase mt-2">Password</label>
 
-        <input type="password" id="password" name="password" v-model="input.password" class="border-[0.5px] border-black rounded-md pl-2 mb-4" placeholder="Password">
+        <input type="password" id="password" name="password" v-model="input.password" class="border-[0.5px] border-black rounded-md w-full pl-2 mb-4" placeholder="Password">
 
-        <button @click.prevent="login" class="btn-primary bg-black">Login</button>
+        <button @click.prevent="login" class="btn-primary w-full bg-black">Login</button>
       </form>
     </div>
     
@@ -30,6 +32,8 @@
 import users from "../assets/data/users.json";
 
 export default {
+  transition: "home",
+
   mounted() {
     if (this.user) {
       this.$router.push("/dashboard");

@@ -1,9 +1,12 @@
 <template>
   <div>
     <div class="text-center my-10">
-      <NuxtLink to="/dashboard" class="heading-1">MRT</NuxtLink>
+      <div class="flex items-center justify-center">
+        <NuxtLink to="/dashboard" class="heading-1 mr-2">MRT™</NuxtLink>
+        <img src="../assets/images/logo.png" class="w-auto h-10" alt="logo" />
+      </div>
     </div>
-    <div class="flex w-full mb-10 mx-48 items-center">
+    <div class="flex mb-10 items-center justify-center">
       <p
         class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
       >

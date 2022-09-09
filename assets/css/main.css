@@ -16,17 +16,61 @@
 }
 
 .heading-1 {
-  @apply text-3xl font-bold my-6;
+  @apply text-3xl my-6;
 }
 
 .heading-2 {
-  @apply text-2xl font-bold my-4;
+  @apply text-2xl my-4;
 }
 
 .heading-3 {
-  @apply text-xl font-bold my-2;
+  @apply text-xl my-2;
 }
 
 .heading-4 {
   @apply text-lg my-2;
+}
+
+.heading-xl {
+  @apply text-4xl my-2;
+}
+
+.heading-bold {
+  @apply text-xl font-bold my-2;
+}
+
+.page-enter-active {
+  animation: acrossIn 0.4s ease-out both;
+}
+.page-leave-active {
+  animation: acrossOut 0.4s ease-in both;
+}
+@keyframes acrossIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(20%, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes acrossOut {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-20%, 0, 0);
+  }
+}
+
+.home-enter-active,
+.home-leave-active {
+  transition: opacity 0.5s;
+}
+.home-enter,
+.home-leave-to {
+  opacity: 0;
 }

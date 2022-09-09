@@ -2,27 +2,28 @@
   <div>
     <div class="relative" v-if="user">
       <div class="text-center my-10">
-        <h1 class="heading-1">MRT</h1>
-        <h1 class="heading-1">Hi {{ fullName }}</h1>
+        <div class="flex items-center justify-center">
+          <h1 class="heading-1 mr-2">MRT™</h1>
+          <img src="../assets/images/logo.png" class="w-auto h-10" alt="logo" />
+        </div>
+        <h1 class="heading-2">Hi {{ fullName }}</h1>
       </div>
-      <div class="flex mx-48 space-x-20">
-        <div class="w-1/2">
-          <h2 class="heading-2">
-            Space reports created by {{ user.username }}
-          </h2>
-          <div class="w-full h-96 border-2 overflow-auto">
+      <div class="md:flex mx-6 md:mx-20 lg:mx-48 md:space-x-20">
+        <div class="md:w-1/2">
+          <h2 class="heading-2">Space reports by {{ user.username }}</h2>
+          <div class="w-full h-auto md:h-96 border-2 rounded-md overflow-auto">
             <div v-for="report in userReports" :key="report.id">
               <div
                 v-if="report.userId == user.id"
                 class="
                   flex
                   bg-black
-                  rounded-sm
+                  rounded-md
                   m-1
-                  py-1
+                  py-3
                   px-3
                   justify-between
-                  items-baseline
+                  items-center
                 "
               >
                 <h3 class="heading-3 text-white">{{ report.missionName }}</h3>
@@ -58,13 +59,15 @@
             </div>
           </div>
         </div>
-        <div class="w-1/2">
-          <NuxtLink to="/details">
-            <button class="btn-link bg-black my-10">
-              + Create new Space report
-            </button>
-          </NuxtLink>
-          <h3 class="heading-3">Fun space facts</h3>
+        <div class="md:w-1/2">
+          <button
+            @click="resetState"
+            class="btn-link bg-black w-full md:w-auto my-10 md:mt-16 md:mb-10"
+          >
+            + Create new Space report
+          </button>
+
+          <h2 class="heading-2">Fun space facts</h2>
           <p>
             There is so much about space, our solar system, and the galaxy that
             we still don't know! Space is vast. With billions of galaxies and
@@ -128,6 +131,10 @@ export default {
       this.missionLong = long;
       this.selectedImages = images;
       this.reportId = report;
+    },
+    resetState() {
+      this.$store.commit("reset");
+      this.$router.push("/details");
     },
   },
 
