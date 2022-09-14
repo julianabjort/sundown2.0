@@ -45,7 +45,7 @@ export default {
     ['nuxt-gmaps', {
       key: 'AIzaSyCMtVIHGoRz37uflqwW1oX88frAOnBBeZA',
       //you can use libraries: ['places']
-    }]
+    }],
   ],
   http: {
     // proxyHeaders: false

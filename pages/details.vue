@@ -2,7 +2,18 @@
   <div>
     <div class="md:flex mx-6 md:mx-20 lg:mx-48 md:space-x-10 lg:space-x-20">
       <div class="flex flex-col md:w-1/2 space-y-2">
-        <label for="name" class="text-xs uppercase mt-2">Mission Name</label>
+        <div class="flex">
+          <label for="name" class="text-xs uppercase mt-2">Mission Name</label>
+          <div v-if="errorName.length">
+            <p
+              class="text-red-500 mt-2 text-xs ml-6"
+              v-for="error in errorName"
+              :key="error.id"
+            >
+              {{ error }}
+            </p>
+          </div>
+        </div>
         <input
           id="name"
           :value="missionName"
@@ -12,9 +23,20 @@
           class="border-[0.5px] border-black rounded-md pl-2"
           placeholder="Mission Name"
         />
-        <label for="name" class="text-xs uppercase mt-2"
-          >Mission Description</label
-        >
+        <div class="flex">
+          <label for="name" class="text-xs uppercase mt-2"
+            >Mission Description</label
+          >
+          <div v-if="errorDesc.length">
+            <p
+              class="text-red-500 mt-2 text-xs ml-6"
+              v-for="error in errorDesc"
+              :key="error.id"
+            >
+              {{ error }}
+            </p>
+          </div>
+        </div>
         <textarea
           id="description"
           :value="missionDesc"
@@ -42,16 +64,12 @@
 
           <button
             @click="checkInputs"
-            class="btn-primary w-1/2 md:w-auto bg-black"
+            class="btn-primary w-1/2 md:w-auto"
+            :disabled="isDisabled"
+            :class="isDisabled ? 'bg-gray-400' : 'bg-black'"
           >
             Next step
           </button>
-        </div>
-
-        <div v-if="errors.length">
-          <p class="text-red-500 mt-2" v-for="error in errors" :key="error.id">
-            {{ error }}
-          </p>
         </div>
       </div>
     </div>
@@ -77,23 +95,47 @@ export default {
       this.missionDate = new Date();
     } else {
       this.missionDate = new Date(this.missionDate);
+      this.isDisabled = false;
     }
   },
 
   data() {
     return {
       user: this.$cookies.get("user"),
-      errors: [],
+      errorName: [],
+      errorDesc: [],
+      isDisabled: true,
     };
+  },
+
+  watch: {
+    missionName() {
+      this.checkNameAndDesc();
+    },
+    missionDesc() {
+      this.checkNameAndDesc();
+    },
   },
 
   methods: {
     checkInputs() {
-      this.errors = [];
-      if (this.missionName && this.missionDesc && this.missionDate) {
-        this.$router.push("/images");
+      this.errorName = [];
+      this.errorDesc = [];
+
+      if (this.missionName === "") {
+        this.errorName.push("Please fill out the mission name");
+      }
+      if (this.missionDesc === "") {
+        this.errorDesc.push("Please fill out the mission description");
       } else {
-        this.errors.push("All fields are required.");
+        this.$router.push("/images");
+      }
+    },
+    checkNameAndDesc() {
+      if (this.missionName !== "" && this.missionDesc !== "") {
+        this.isDisabled = false;
+      } else {
+        this.isDisabled = true;
       }
     },
     update(e, type) {
@@ -129,6 +171,9 @@ export default {
       set(value) {
         this.$store.commit("setMissionDate", { missionDate: value });
       },
+    },
+    missionNameAndDesc() {
+      return [this.missionName, this.missionDesc].join();
     },
     ...mapGetters(["missionName", "missionDesc"]),
   },

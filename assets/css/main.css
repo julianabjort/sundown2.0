@@ -15,6 +15,12 @@
     rounded-lg;
 }
 
+.btn-secondary {
+  @apply py-1 
+    px-4         
+    rounded-lg;
+}
+
 .heading-1 {
   @apply text-3xl my-6;
 }
@@ -36,7 +42,7 @@
 }
 
 .heading-bold {
-  @apply text-xl font-bold my-2;
+  @apply text-xl font-bold;
 }
 
 .page-enter-active {
@@ -65,10 +71,13 @@
     transform: translate3d(-20%, 0, 0);
   }
 }
+/* .page-enter, .page-leave-to {
+  opacity: 0;
+} */
 
 .home-enter-active,
 .home-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.4s;
 }
 .home-enter,
 .home-leave-to {

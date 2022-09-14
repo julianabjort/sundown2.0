@@ -32,7 +32,11 @@
               grid-rows-auto
             "
           >
-            <div v-for="image in selectedImages" :key="image.id">
+            <div
+              v-for="image in selectedImages"
+              :key="image.id"
+              class="relative"
+            >
               <img
                 class="
                   grid grid-cols-2
@@ -41,8 +45,12 @@
                   object-cover
                   aspect-square
                 "
-                :src="image"
+                :src="image.img"
               />
+              <p class="absolute bottom-1 left-1 text-xs text-white">
+                {{ image.cameraName }} -
+                {{ image.roverText }}
+              </p>
             </div>
           </div>
         </div>
@@ -83,11 +91,11 @@ export default {
   middleware({ store, redirect }) {
     if (
       store.state.missionName === "" ||
-      store.state.missionDesc == "" ||
-      store.state.missionDate == null ||
-      store.state.selectedImages == [] ||
-      store.state.missionDate == null ||
-      store.state.missionDate == null
+      store.state.missionDesc === "" ||
+      store.state.missionDate === null ||
+      store.state.selectedImages === [] ||
+      store.state.missionDate === null ||
+      store.state.missionDate === null
     ) {
       return redirect("/details");
     }
@@ -106,7 +114,7 @@ export default {
     finaliseReport() {
       this.errors = [];
       let userReports = JSON.parse(localStorage.getItem("userReports"));
-      if (userReports == null) userReports = [];
+      if (userReports === null) userReports = [];
       userReports = userReports.filter(
         (report) => report.reportId !== this.report.reportId
       );

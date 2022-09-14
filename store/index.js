@@ -6,9 +6,11 @@ const defaultState = () => {
     missionName: '',
     missionDesc: '',
     missionDate: null,
-    selectedImages: [],
+    selectedImages: [
+    ],
     missionLat: null,
-    missionLong: null
+    missionLong: null,
+    isEditing: false,
     }
 }
 
@@ -39,13 +41,15 @@ export const mutations = {
     setMissionLong(state, payload) {
         state.missionLong = payload.missionLong
     },
+    setIsEditing(state, payload) {
+        state.isEditing = payload.isEditing
+    },
     set(state, {key, value}) {
         state[key] = value 
     },
     reset(state) {
         Object.assign(state, defaultState())
     }
-
 }
 
 export const getters = {

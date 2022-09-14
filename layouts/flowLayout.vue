@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user">
     <div class="text-center my-10">
       <div class="flex items-center justify-center">
         <NuxtLink to="/dashboard" class="heading-1 mr-2">MRT™</NuxtLink>
@@ -8,7 +8,12 @@
     </div>
     <div class="flex mb-10 items-center justify-center">
       <p
-        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+        @click="
+          goToStep('details');
+          goToDetails();
+        "
+        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
+        :class="isDetailsPage ? 'bg-indigo-500' : 'bg-gray-300'"
       >
         1
       </p>
@@ -17,35 +22,47 @@
         class="w-1/5 h-1 line1"
         :class="
           isImagesPage || isLocationPage || isFinalPage
-            ? 'bg-black'
+            ? 'bg-gray-300'
             : 'bg-white'
         "
       ></div>
 
       <p
-        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+        @click="
+          goToStep('images');
+          goToImages();
+        "
+        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
+        :class="isImagesPage ? 'bg-indigo-500' : 'bg-gray-300'"
       >
         2
       </p>
 
       <div
         class="w-1/5 h-1 line2"
-        :class="isLocationPage || isFinalPage ? 'bg-black' : 'bg-white'"
+        :class="isLocationPage || isFinalPage ? 'bg-gray-300' : 'bg-white'"
       ></div>
 
       <p
-        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+        @click="
+          goToStep('location');
+          goToLocation();
+        "
+        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
+        :class="isLocationPage ? 'bg-indigo-500' : 'bg-gray-300'"
       >
         3
       </p>
 
       <div
         class="w-1/5 h-1 line3"
-        :class="isFinalPage ? 'bg-black' : 'bg-white'"
+        :class="isFinalPage ? 'bg-gray-300' : 'bg-white'"
       ></div>
 
       <p
-        class="bg-indigo-500 text-white rounded-full w-6 text-center font-bold"
+        @click="goToStep('finalise')"
+        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
+        :class="isFinalPage ? 'bg-indigo-500' : 'bg-gray-300'"
       >
         4
       </p>
@@ -56,6 +73,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      user: this.$cookies.get("user"),
+    };
+  },
+  created() {
+    if (!this.user) {
+      this.$router.push("/");
+    }
+  },
   watch: {
     $route(to, from) {
       if (to.name === "images" && from.name === "details") {
@@ -77,8 +104,48 @@ export default {
         { duration: 2, scaleX: 1, ease: "expo" }
       );
     },
+    goToStep(step) {
+      if (this.$store.state.isEditing === true) {
+        this.$router.push(`/${step}`);
+      }
+    },
+
+    goToDetails() {
+      if (this.$store.state.isEditing === false) {
+        this.$router.push("/details");
+      }
+    },
+    goToImages() {
+      if (this.$store.state.isEditing === false) {
+        if (
+          this.isLocationPage ||
+          this.isFinalPage ||
+          (this.$store.state.missionName !== "" &&
+            this.$store.state.missionDate !== "" &&
+            this.$store.state.missionDesc !== null)
+        ) {
+          this.$router.push("/images");
+        }
+      }
+    },
+    goToLocation() {
+      if (this.$store.state.isEditing === false) {
+        if (
+          this.isFinalPage ||
+          (this.$store.state.missionName !== "" &&
+            this.$store.state.missionDate !== "" &&
+            this.$store.state.missionDesc !== null &&
+            this.$store.state.selectedImages.length)
+        ) {
+          this.$router.push("/location");
+        }
+      }
+    },
   },
   computed: {
+    isDetailsPage() {
+      return this.$route.path === "/details";
+    },
     isImagesPage() {
       return this.$route.path === "/images";
     },

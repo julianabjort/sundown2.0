@@ -13,9 +13,9 @@
           <li class="text-red-500" v-for="error in errors" :key="error.id">{{ error }}</li>
         </ul>
       </p>
-        <label for="email" class="text-xs uppercase mt-2">E-mail</label>
+        <label for="email" class="text-xs uppercase mt-2">E-mail or username</label>
 
-        <input id="email" name="email" type="email" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2 w-full" placeholder="E-mail">
+        <input id="email" name="email" type="email" v-model="input.email" class="border-[0.5px] border-black rounded-md pl-2 w-full" placeholder="E-mail or username">
         
         <label for="password" class="text-xs uppercase mt-2">Password</label>
 
@@ -32,9 +32,11 @@
 import users from "../assets/data/users.json";
 
 export default {
-  transition: "home",
+  transition: {
+    name: "home",
+  },
 
-  mounted() {
+  created() {
     if (this.user) {
       this.$router.push("/dashboard");
     }
@@ -56,15 +58,27 @@ export default {
       this.errors = [];
       const user = users.find(
         (user) =>
-          user.email === this.input.email &&
+          (user.email === this.input.email ||
+            user.username === this.input.email) &&
           user.password === this.input.password
       );
 
       if (!this.input.email || !this.input.password) {
         this.errors.push("Email and/or password required.");
-      } else if (!this.validEmail(this.input.email)) {
-        this.errors.push("Valid email required.");
-      } else if (user == undefined) {
+      }
+      // validation if input is email
+      else if (this.input.email.includes("@")) {
+        if (!this.validEmail(this.input.email)) {
+          this.errors.push("Valid email required.");
+        } else if (user === undefined) {
+          this.errors.push("Wrong credentials");
+        } else {
+          this.$cookies.set("user", user);
+          this.$router.push("/dashboard");
+        }
+      }
+      // validation if input is username
+      else if (user === undefined) {
         this.errors.push("Wrong credentials");
       } else {
         this.$cookies.set("user", user);

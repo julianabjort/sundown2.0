@@ -33,9 +33,9 @@
 
             <div
               v-else
-              v-for="image in images"
+              v-for="(image, index) in images.photos"
               :key="image.title"
-              class="w-full"
+              class="w-full relative"
             >
               <img
                 class="
@@ -45,10 +45,29 @@
                   cursor-pointer
                   object-cover
                 "
-                :src="image.image"
+                :src="image.img_src"
                 alt=""
-                @click="selectImage(image.image)"
+                @click="
+                  selectImage(
+                    image.img_src,
+                    image.camera.name,
+                    image.rover.name,
+                    image.rover.status,
+                    index
+                  )
+                "
               />
+              <p
+                v-if="index % 2 === 0"
+                class="absolute bottom-1 left-1 text-xs text-white"
+              >
+                {{ image.camera.name }} -
+                {{ image.rover.status }}
+              </p>
+              <p v-else class="absolute bottom-1 left-1 text-xs text-white">
+                {{ image.camera.name }} -
+                {{ image.rover.name }}
+              </p>
             </div>
           </div>
         </div>
@@ -75,7 +94,16 @@
               mb-4
             "
           >
-            <div v-for="image in selectedImages" :key="image.id" class="w-full">
+            <div
+              v-for="image in selectedImages"
+              :key="image.id"
+              class="w-full relative"
+            >
+              <p class="absolute bottom-1 left-1 text-xs text-white">
+                {{ image.cameraName }} -
+                {{ image.roverText }}
+              </p>
+
               <img
                 class="
                   rounded-md
@@ -84,9 +112,9 @@
                   object-cover
                   aspect-square
                 "
-                :src="image"
+                :src="image.img"
                 alt=""
-                @click="removeImage(image)"
+                @click="removeImage(image.img)"
               />
             </div>
           </div>
@@ -131,18 +159,37 @@ export default {
     };
   },
   async fetch() {
-    this.images = await fetch("https://api.nuxtjs.dev/mountains").then((res) =>
-      res.json()
-    );
+    this.images = await fetch(
+      "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=DEMO_KEY&sol=15"
+    ).then((res) => res.json());
   },
   methods: {
-    selectImage(img) {
-      const selected = this.selectedImages.find((image) => image === img);
-      if (!selected) this.selectedImages = [...this.selectedImages, img];
+    selectImage(img, cameraName, roverName, roverStatus, index) {
+      // const selected = this.selectedImages.find((image) => image.img === img);
+      // console.log(selected);
+      if (index % 2 === 0) {
+        this.selectedImages = [
+          ...this.selectedImages,
+          {
+            img,
+            cameraName,
+            roverText: roverStatus,
+          },
+        ];
+      } else {
+        this.selectedImages = [
+          ...this.selectedImages,
+          {
+            img,
+            cameraName,
+            roverText: roverName,
+          },
+        ];
+      }
     },
     removeImage(img) {
       this.selectedImages = this.selectedImages.filter(
-        (image) => image !== img
+        (image) => image.img !== img
       );
     },
     checkImages() {

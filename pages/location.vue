@@ -8,20 +8,49 @@
         </div>
       </div>
       <div class="md:w-1/2">
-        <h4 class="text-xs uppercase mb-1 mt-6">Latitude</h4>
-        <div class="w-full md:w-2/3 h-10 rounded-md border-2">
-          <p>{{ latitude }}</p>
+        <div class="mt-6">
+          <input type="checkbox" id="checkbox" v-model="checked" />
+          <label for="checkbox">Choose coordinates</label>
         </div>
-        <h4 class="text-xs uppercase mb-1 mt-6">Longitude</h4>
-        <div class="w-full md:w-2/3 h-10 border-2 rounded-md mb-4">
-          <p>{{ longitude }}</p>
+        <div v-if="checked">
+          <h4 class="text-xs uppercase mb-1 mt-6">Latitude</h4>
+          <input
+            class="w-full md:w-2/3 h-10 rounded-md pl-2 border-2"
+            type="text"
+            v-model="customLatitude"
+          />
+
+          <h4 class="text-xs uppercase mb-1 mt-6">Longitude</h4>
+          <input
+            class="w-full md:w-2/3 h-10 rounded-md border-2 pl-2"
+            type="text"
+            v-model="customLongitude"
+          />
         </div>
-        <div class="flex space-x-4 md:space-x-0">
+        <div v-else>
+          <h4 class="text-xs uppercase mb-1 mt-6">Latitude</h4>
+          <p class="w-full md:w-2/3 h-10 rounded-md pl-2 border-2">
+            {{ latitude }}
+          </p>
+
+          <h4 class="text-xs uppercase mb-1 mt-6">Longitude</h4>
+          <p class="w-full md:w-2/3 h-10 rounded-md pl-2 border-2">
+            {{ longitude }}
+          </p>
+        </div>
+        <div class="flex space-x-4 md:space-x-1 mt-4">
           <div class="md:hidden w-1/2">
             <NuxtLink to="/images">
               <button class="btn-primary w-full bg-black">Back</button>
             </NuxtLink>
           </div>
+          <button
+            class="btn-primary bg-black"
+            @click="updateCustomPosition"
+            v-if="checked"
+          >
+            Update
+          </button>
           <NuxtLink to="/finalise" class="w-1/2">
             <button class="btn-primary w-full md:w-auto bg-black">
               Next step
@@ -71,17 +100,23 @@ export default {
       positions: [],
       latitude: null,
       longitude: null,
+      customLatitude: null,
+      customLongitude: null,
       timer: "",
       marker: null,
+      checked: false,
     };
   },
 
   methods: {
     async fetchData() {
-      await this.fetchPositions();
-      this.createMap();
-      this.setMapCenter();
-      this.setMarker();
+      if (this.checked === false) {
+        await this.fetchPositions();
+        this.createMap();
+        this.setMapCenter();
+        this.createMarker();
+        this.setMarker();
+      }
     },
 
     saveLat(latitude) {
@@ -112,18 +147,30 @@ export default {
         center: [this.longitude, this.latitude],
       });
       this.createMarker();
+      // this.map.on("move", () => {
+      //   console.log("A move event occurred.");
+      // });
     },
     setMapCenter() {
       const center = new mapboxgl.LngLat(this.longitude, this.latitude);
       this.map.setCenter(center);
     },
     createMarker() {
-      this.marker = new mapboxgl.Marker()
+      this.marker = new mapboxgl.Marker({ color: "rgb(99 102 241)" })
         .setLngLat([this.longitude, this.latitude])
         .addTo(this.map);
     },
     setMarker() {
       this.marker.setLngLat([this.longitude, this.latitude]);
+    },
+
+    updateCustomPosition() {
+      const center = new mapboxgl.LngLat(
+        this.customLongitude,
+        this.customLatitude
+      );
+      this.map.flyTo({ center, zoom: 6 });
+      this.marker.setLngLat([this.customLongitude, this.customLatitude]);
     },
   },
 
