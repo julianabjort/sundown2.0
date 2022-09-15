@@ -1,32 +1,13 @@
 <template>
   <div>
     <div
-      class="
-        flex
-        mx-6
-        md:mx-20
-        lg:mx-48
-        space-x-4
-        sm:space-x-8
-        md:space-x-10
-        lg:space-x-20
-      "
+      class="flex mx-6 md:mx-20 lg:mx-48 space-x-4 sm:space-x-8 md:space-x-10 lg:space-x-20"
     >
       <div class="w-1/2">
         <h3 class="text-xs uppercase mb-2">Image Bank</h3>
         <div class="h-[500px] md:h-96 border-2 rounded-md overflow-auto">
           <div
-            class="
-              w-full
-              h-auto
-              p-2
-              grid grid-cols-1
-              md:grid-cols-2
-              lg:grid-cols-3
-              gap-2
-              grid-rows-auto
-              mb-4
-            "
+            class="w-full h-auto p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 grid-rows-auto mb-4"
           >
             <p v-if="$fetchState.pending">Fetching images...</p>
             <p v-else-if="$fetchState.error">An error occurred :(</p>
@@ -38,13 +19,7 @@
               class="w-full relative"
             >
               <img
-                class="
-                  rounded-md
-                  aspect-square
-                  w-full
-                  cursor-pointer
-                  object-cover
-                "
+                class="rounded-md aspect-square w-full cursor-pointer object-cover"
                 :src="image.img_src"
                 alt=""
                 @click="
@@ -82,17 +57,7 @@
         <h3 class="text-xs uppercase mb-2">Selected Images</h3>
         <div class="h-[500px] md:h-96 border-2 rounded-md overflow-auto">
           <div
-            class="
-              w-full
-              h-auto
-              p-2
-              grid grid-cols-1
-              md:grid-cols-2
-              lg:grid-cols-3
-              gap-2
-              grid-rows-auto
-              mb-4
-            "
+            class="w-full h-auto p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 grid-rows-auto mb-4"
           >
             <div
               v-for="image in selectedImages"
@@ -105,13 +70,7 @@
               </p>
 
               <img
-                class="
-                  rounded-md
-                  w-full
-                  cursor-pointer
-                  object-cover
-                  aspect-square
-                "
+                class="rounded-md w-full cursor-pointer object-cover aspect-square"
                 :src="image.img"
                 alt=""
                 @click="removeImage(image.img)"
@@ -160,32 +119,23 @@ export default {
   },
   async fetch() {
     this.images = await fetch(
-      "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=DEMO_KEY&sol=15"
+      "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=33FwE0MvWwZSp4zdEjnccK2wfLGQ6CaMwZtL6P8f&sol=15"
     ).then((res) => res.json());
   },
   methods: {
     selectImage(img, cameraName, roverName, roverStatus, index) {
       // const selected = this.selectedImages.find((image) => image.img === img);
       // console.log(selected);
-      if (index % 2 === 0) {
-        this.selectedImages = [
-          ...this.selectedImages,
-          {
-            img,
-            cameraName,
-            roverText: roverStatus,
-          },
-        ];
-      } else {
-        this.selectedImages = [
-          ...this.selectedImages,
-          {
-            img,
-            cameraName,
-            roverText: roverName,
-          },
-        ];
-      }
+
+      const roverText = index % 2 === 0 ? roverStatus : roverName;
+      this.selectedImages = [
+        ...this.selectedImages,
+        {
+          img,
+          cameraName,
+          roverText,
+        },
+      ];
     },
     removeImage(img) {
       this.selectedImages = this.selectedImages.filter(
