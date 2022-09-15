@@ -1,40 +1,24 @@
 <template>
   <div v-if="user" class="relative">
-    <div
-      v-if="showModal"
-      class="fixed flex w-screen h-screen z-10 items-center justify-center"
-    >
-      <div
+    <Modal :show="showModal" @close="showModal = false">
+      <h1 class="heading-bold">Delete report</h1>
+      <h2 class="mb-4">Are you sure you want to delete this report?</h2>
+      <button
         @click="showModal = false"
-        class="absolute w-full h-full bg-black opacity-30"
-      ></div>
-      <div class="relative w-1/3 h-auto bg-white rounded-md px-16 py-10 z-20">
-        <h1 class="heading-bold">Delete report</h1>
-        <h2 class="mb-4">Are you sure you want to delete this report?</h2>
-        <button
-          @click="showModal = false"
-          class="btn-secondary border-2 border-red-500 text-red-500"
-        >
-          Cancel
-        </button>
-        <button
-          @click="
-            deleteReport(deleteReportId);
-            showModal = false;
-          "
-          class="btn-primary bg-red-500 border-2 border-red-500"
-        >
-          Delete
-        </button>
-        <p
-          @click="showModal = false"
-          class="absolute top-2 right-4 cursor-pointer text-xl text-gray-400"
-        >
-          x
-        </p>
-      </div>
-    </div>
-
+        class="btn-secondary border-2 border-red-500 text-red-500"
+      >
+        Cancel
+      </button>
+      <button
+        @click="
+          deleteReport(deleteReportId);
+          showModal = false;
+        "
+        class="btn-primary bg-red-500 border-2 border-red-500"
+      >
+        Delete
+      </button>
+    </Modal>
     <div class="flex items-center justify-center pt-6">
       <h1 class="heading-1 mr-2">MRT™</h1>
       <img src="../assets/images/logo.png" class="w-auto h-10" alt="logo" />
@@ -45,14 +29,7 @@
       <div class="md:w-1/2">
         <h2 class="heading-2">Space reports by {{ user.username }}</h2>
         <div
-          class="
-            w-full
-            h-auto
-            md:h-96
-            border-2 border-gray-100
-            rounded-md
-            overflow-auto
-          "
+          class="w-full h-auto md:h-96 border-2 border-gray-100 rounded-md overflow-auto"
         >
           <div
             class="relative"
@@ -61,20 +38,7 @@
           >
             <div
               v-if="report.userId == user.id"
-              class="
-                group
-                flex
-                bg-gray-100
-                rounded-md
-                m-2
-                py-4
-                px-3
-                justify-between
-                items-center
-                shadow-sm
-                hover:bg-gray-200
-                cursor-default
-              "
+              class="group flex bg-gray-100 rounded-md m-2 py-4 px-3 justify-between items-center shadow-sm hover:bg-gray-200 cursor-default"
             >
               <div class="flex">
                 <img
@@ -98,23 +62,10 @@
                 <NuxtLink to="/details">
                   <button
                     @click="
-                      editReport(
-                        report.userId,
-                        report.missionName,
-                        report.missionDesc,
-                        report.missionDate,
-                        report.missionLat,
-                        report.missionLong,
-                        report.selectedImages,
-                        report.reportId,
-                        report.isEditing
-                      )
+                      // Pass the full report object
+                      editReport(report)
                     "
-                    class="
-                      md:hidden md:group-hover:block
-                      btn-primary
-                      bg-blue-500
-                    "
+                    class="md:hidden md:group-hover:block btn-primary bg-blue-500"
                   >
                     Edit
                   </button>
@@ -201,7 +152,8 @@ export default {
     setDeleteReportId(id) {
       this.deleteReportId = id;
     },
-    editReport(user, name, desc, date, lat, long, images, report) {
+    // Destructure report object
+    editReport({ user, name, desc, date, lat, long, images, report }) {
       this.userId = user;
       this.missionName = name;
       this.missionDesc = desc;
@@ -217,7 +169,11 @@ export default {
       this.$router.push("/details");
     },
     getFormattedDate(date) {
-      return moment(date).format("MMM D");
+      // Use browser date formatting
+      return new Date(date).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
     },
   },
 
@@ -226,10 +182,12 @@ export default {
       return this.user.first_name + " " + this.user.last_name;
     },
     sortedReports() {
-      this.userReports.sort((a, b) => {
+      // Spread into new array to avoid mutating the original
+      const sorted = [...this.userReports]?.sort((a, b) => {
         return new Date(b.missionDate) - new Date(a.missionDate);
       });
-      return this.userReports;
+
+      return sorted;
     },
     userId: {
       get() {
