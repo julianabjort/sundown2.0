@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    <div class="hidden md:inline absolute left-10 bottom-20">
+    <div class="hidden md:inline absolute left-10 bottom-10">
       <NuxtLink to="/location" class="btn-link bg-black">Back</NuxtLink>
     </div>
   </div>
@@ -86,7 +86,7 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 
 export default {
-  layout: "FlowLayout",
+  layout: "TestLayout",
 
   middleware({ store, redirect }) {
     if (

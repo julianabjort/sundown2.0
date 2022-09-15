@@ -85,14 +85,35 @@ export default {
   },
   watch: {
     $route(to, from) {
+      // all animations from step 1
       if (to.name === "images" && from.name === "details") {
         this.animateForward(".line1");
+      }
+      if (to.name === "location" && from.name === "details") {
+        this.animateForwardTwoSteps(".line1", ".line2");
+      }
+      if (to.name === "finalise" && from.name === "details") {
+        this.animateForwardThreeSteps(".line1", ".line2", ".line3");
+      }
+      // all animations from step 2
+      if (to.name === "details" && from.name === "images") {
+        this.animateBackward(".line1");
       }
       if (to.name === "location" && from.name === "images") {
         this.animateForward(".line2");
       }
+      if (to.name === "finalise" && from.name === "images") {
+        this.animateForwardTwoSteps(".line2", ".line3");
+      }
+      // all animations from step 3
+      if (to.name === "images" && from.name === "location") {
+        this.animateBackward(".line2");
+      }
       if (to.name === "finalise" && from.name === "location") {
         this.animateForward(".line3");
+      }
+      if (to.name === "location" && from.name === "finalise") {
+        this.animateBackward(".line3");
       }
     },
   },
@@ -104,6 +125,51 @@ export default {
         { duration: 2, scaleX: 1, ease: "expo" }
       );
     },
+    animateBackward(line) {
+      this.$gsap.set(line, { backgroundColor: "rgb(209 213 219)" });
+      this.$gsap.fromTo(
+        line,
+        {
+          scaleX: 1,
+          transformOrigin: "left",
+        },
+        {
+          duration: 2,
+          scaleX: 0,
+          ease: "expo",
+        }
+      );
+    },
+    animateForwardTwoSteps(line1, line2) {
+      this.$gsap.fromTo(
+        line1,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 0.2, scaleX: 1 }
+      );
+      this.$gsap.fromTo(
+        line2,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 2, scaleX: 1, ease: "expo", delay: 0.2 }
+      );
+    },
+    animateForwardThreeSteps(line1, line2, line3) {
+      this.$gsap.fromTo(
+        line1,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 0.2, scaleX: 1 }
+      );
+      this.$gsap.fromTo(
+        line2,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 0.2, scaleX: 1, delay: 0.2 }
+      );
+      this.$gsap.fromTo(
+        line3,
+        { scaleX: 0, transformOrigin: "left" },
+        { duration: 2, scaleX: 1, ease: "expo", delay: 0.4 }
+      );
+    },
+
     goToStep(step) {
       if (this.$store.state.isEditing === true) {
         this.$router.push(`/${step}`);

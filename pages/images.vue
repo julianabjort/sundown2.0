@@ -141,7 +141,7 @@
 
 <script>
 export default {
-  layout: "FlowLayout",
+  layout: "TestLayout",
 
   middleware({ store, redirect }) {
     if (
