@@ -8,83 +8,18 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="
-          flex
-          w-4/5
-          align-center
-          justify-between
-          mb-10
-          items-center
-          relative
-        "
+        class="flex w-4/5 align-center justify-between mb-10 items-center relative"
       >
         <div class="absolute -z-10 w-full h-1 line bg-white"></div>
-        <p
-          @click="
-            goToStep('details');
-            goToDetails();
-          "
-          class="
-            text-white
-            rounded-full
-            w-6
-            text-center
-            font-bold
-            cursor-pointer
-          "
-          :class="isDetailsPage ? 'bg-indigo-500' : 'bg-gray-300'"
+        <button
+          class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
+          v-for="step in steps"
+          :key="step.name"
+          @click="goToStepNew(step)"
+          :class="step.id === activeStep ? 'bg-blue-500' : 'bg-gray-300'"
         >
-          1
-        </p>
-
-        <p
-          @click="
-            goToStep('images');
-            goToImages();
-          "
-          class="
-            text-white
-            rounded-full
-            w-6
-            text-center
-            font-bold
-            cursor-pointer
-          "
-          :class="isImagesPage ? 'bg-indigo-500' : 'bg-gray-300'"
-        >
-          2
-        </p>
-        <p
-          @click="
-            goToStep('location');
-            goToLocation();
-          "
-          class="
-            text-white
-            rounded-full
-            w-6
-            text-center
-            font-bold
-            cursor-pointer
-          "
-          :class="isLocationPage ? 'bg-indigo-500' : 'bg-gray-300'"
-        >
-          3
-        </p>
-        <p
-          @click="goToStep('finalise')"
-          class="
-            text-white
-            rounded-full
-            w-6
-            text-center
-            font-bold
-            cursor-pointer
-          "
-          :class="isFinalPage ? 'bg-indigo-500' : 'bg-gray-300'"
-        >
-          4
-        </p>
+          {{ step.id + 1 }}
+        </button>
       </div>
     </div>
     <NuxtChild />
@@ -96,6 +31,25 @@ export default {
   data() {
     return {
       user: this.$cookies.get("user"),
+      activeStep: 0,
+      steps: [
+        {
+          id: 0,
+          name: "details",
+        },
+        {
+          id: 1,
+          name: "images",
+        },
+        {
+          id: 2,
+          name: "location",
+        },
+        {
+          id: 3,
+          name: "finalise",
+        },
+      ],
     };
   },
   created() {
@@ -176,12 +130,16 @@ export default {
         }
       );
     },
-
-    goToStep(step) {
-      if (this.$store.state.isEditing === true) {
-        this.$router.push(`/${step}`);
-      }
+    goToStepNew(step) {
+      this.activeStep = step.id;
+      // Gsap animate the step here
+      this.$router.push(`/${step.name}`);
     },
+    // goToStep(step) {
+    //   if (this.$store.state.isEditing === true) {
+    //     this.$router.push(`/${step}`);
+    //   }
+    // },
 
     goToDetails() {
       if (this.$store.state.isEditing === false) {
@@ -231,4 +189,3 @@ export default {
   },
 };
 </script>
-
