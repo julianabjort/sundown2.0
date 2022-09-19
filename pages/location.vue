@@ -70,7 +70,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 export default {
-  layout: "TestLayout",
+  layout: "flow",
 
   middleware({ store, redirect }) {
     if (

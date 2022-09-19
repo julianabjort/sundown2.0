@@ -86,7 +86,7 @@ import { mapGetters } from "vuex";
 
 export default {
   components: { DatePicker },
-  layout: "TestLayout",
+  layout: "flow",
 
   created() {
     if (this.userId === null || this.reportId === "") {

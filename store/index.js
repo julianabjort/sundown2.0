@@ -12,6 +12,7 @@ const defaultState = () => {
     missionLong: null,
     isEditing: false,
     }
+    
 }
 
 export const state = defaultState()
@@ -56,8 +57,10 @@ export const getters = {
     missionName: (state) => state.missionName,
     missionDesc: (state) => state.missionDesc,
     missionDate: (state) => state.missionDate,
+    firstStepFilled: (state) => state.missionName && state.missionDesc && state.missionDate ? true : false,
     selectedImages: (state) => state.selectedImages,
     missionLat: (state) => state.missionLat,
     missionLong: (state) => state.missionLong,
+    latLongFilled: (state) => state.missionLong && state.missionLat !== null ? true : false,
 
 }

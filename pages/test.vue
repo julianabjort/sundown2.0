@@ -1,82 +1,35 @@
 <template>
-  <div v-if="user">
-    <div class="text-center my-10">
-      <div class="flex items-center justify-center">
-        <NuxtLink to="/dashboard" class="heading-1 mr-2">MRT™</NuxtLink>
-        <img src="../assets/images/logo.png" class="w-auto h-10" alt="logo" />
-      </div>
+  <div class="flex justify-center">
+    <div
+      class="
+        flex
+        w-4/5
+        align-center
+        justify-between
+        my-28
+        items-center
+        relative
+      "
+    >
+      <div class="absolute -z-10 w-full h-1 line bg-gray-500"></div>
+      <button
+        class="
+          text-white
+          rounded-full
+          w-6
+          text-center
+          font-bold
+          cursor-pointer
+          mx-20
+        "
+        v-for="step in steps"
+        :key="step.name"
+        @click="goToStep(step)"
+        :class="step.id === activeStep ? 'bg-blue-500' : 'bg-gray-300'"
+      >
+        {{ step.id + 1 }}
+      </button>
     </div>
-    <div class="flex mb-10 items-center justify-center">
-      <p
-        @click="
-          goToStep('details');
-          goToDetails();
-        "
-        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
-        :class="isDetailsPage ? 'bg-indigo-500' : 'bg-gray-300'"
-      >
-        1
-      </p>
-
-      <div
-        class="w-1/5 h-1 line1"
-        :class="
-          isImagesPage || isLocationPage || isFinalPage
-            ? 'bg-gray-300'
-            : 'bg-white'
-        "
-      ></div>
-      <!-- <div v-if="showLine" class="w-1/5 h-1 lineBack1 bg-gray-300"></div> -->
-
-      <p
-        @click="
-          goToStep('images');
-          goToImages();
-        "
-        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
-        :class="isImagesPage ? 'bg-indigo-500' : 'bg-gray-300'"
-      >
-        2
-      </p>
-
-      <div
-        class="w-1/5 h-1 line2"
-        :class="isLocationPage || isFinalPage ? 'bg-gray-300' : 'bg-white'"
-      ></div>
-      <!-- <div
-        class="w-1/5 h-1 lineBack2"
-        :class="isImagesPage ? 'bg-gray-300' : 'hidden'"
-      ></div> -->
-
-      <p
-        @click="
-          goToStep('location');
-          goToLocation();
-        "
-        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
-        :class="isLocationPage ? 'bg-indigo-500' : 'bg-gray-300'"
-      >
-        3
-      </p>
-
-      <div
-        class="w-1/5 h-1 line3"
-        :class="isFinalPage ? 'bg-gray-300' : 'bg-white'"
-      ></div>
-      <!-- <div
-        class="w-1/5 h-1 lineBack3"
-        :class="isLocationPage ? 'bg-gray-300' : 'hidden'"
-      ></div> -->
-
-      <p
-        @click="goToStep('finalise')"
-        class="text-white rounded-full w-6 text-center font-bold cursor-pointer"
-        :class="isFinalPage ? 'bg-indigo-500' : 'bg-gray-300'"
-      >
-        4
-      </p>
-    </div>
-    <NuxtChild />
   </div>
 </template>
 
@@ -84,106 +37,35 @@
 export default {
   data() {
     return {
-      user: this.$cookies.get("user"),
-      showLine: false,
+      activeStep: 0,
+      steps: [
+        {
+          id: 0,
+          name: "details",
+        },
+        {
+          id: 1,
+          name: "images",
+        },
+        {
+          id: 2,
+          name: "location",
+        },
+        {
+          id: 3,
+          name: "finalise",
+        },
+      ],
     };
   },
-  created() {
-    if (!this.user) {
-      this.$router.push("/");
-    }
-  },
-  watch: {
-    $route(to, from) {
-      if (to.name === "images" && from.name === "details") {
-        this.animateForward(".line1");
-      }
-      if (to.name === "details" && from.name === "images") {
-        this.showLine = true;
-        this.animateBackward(".lineBack1");
-      }
-      if (to.name === "location" && from.name === "images") {
-        this.animateForward(".line2");
-      }
-      // if (to.name === "images" && from.name === "location") {
-      //   this.animateBackward(".lineBack2");
-      // }
-      if (to.name === "finalise" && from.name === "location") {
-        this.animateForward(".line3");
-      }
-      // if (to.name === "location" && from.name === "finalise") {
-      //   this.animateBackward(".lineBack3");
-      // }
-    },
-  },
   methods: {
-    animateForward(line) {
-      this.$gsap.fromTo(
-        line,
-        { scaleX: 0, transformOrigin: "left" },
-        { duration: 2, scaleX: 1, ease: "expo" }
-      );
-    },
-    animateBackward(line) {
-      this.$gsap.fromTo(
-        line,
-        { scaleX: 1, transformOrigin: "left" },
-        { duration: 2, scaleX: 0, ease: "expo" }
-      );
-    },
     goToStep(step) {
-      if (this.$store.state.isEditing === true) {
-        this.$router.push(`/${step}`);
-      }
-    },
-
-    goToDetails() {
-      if (this.$store.state.isEditing === false) {
-        this.$router.push("/details");
-      }
-    },
-    goToImages() {
-      if (this.$store.state.isEditing === false) {
-        if (
-          this.isLocationPage ||
-          this.isFinalPage ||
-          (this.$store.state.missionName !== "" &&
-            this.$store.state.missionDate !== "" &&
-            this.$store.state.missionDesc !== null)
-        ) {
-          this.$router.push("/images");
-        }
-      }
-    },
-    goToLocation() {
-      if (this.$store.state.isEditing === false) {
-        if (
-          this.isFinalPage ||
-          (this.$store.state.missionName !== "" &&
-            this.$store.state.missionDate !== "" &&
-            this.$store.state.missionDesc !== null &&
-            this.$store.state.selectedImages.length)
-        ) {
-          this.$router.push("/location");
-        }
-      }
-    },
-  },
-  computed: {
-    isDetailsPage() {
-      return this.$route.path === "/details";
-    },
-    isImagesPage() {
-      return this.$route.path === "/images";
-    },
-    isLocationPage() {
-      return this.$route.path === "/location";
-    },
-    isFinalPage() {
-      return this.$route.path === "/finalise";
+      this.activeStep = step.id;
+      // Gsap animate the step here
     },
   },
 };
 </script>
 
-
+<style>
+</style>

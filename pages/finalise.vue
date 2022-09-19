@@ -19,41 +19,12 @@
           <p>{{ missionLong }}</p>
         </div>
       </div>
-      <div class="md:w-1/2 text-center">
-        <div class="h-auto md:h-96 border-2 rounded-md overflow-auto">
-          <div
-            class="
-              w-full
-              h-auto
-              p-2
-              grid grid-cols-2
-              lg:grid-cols-3
-              gap-2
-              grid-rows-auto
-            "
-          >
-            <div
-              v-for="image in selectedImages"
-              :key="image.id"
-              class="relative"
-            >
-              <img
-                class="
-                  grid grid-cols-2
-                  rounded-md
-                  w-full
-                  object-cover
-                  aspect-square
-                "
-                :src="image.img"
-              />
-              <p class="absolute bottom-1 left-1 text-xs text-white">
-                {{ image.cameraName }} -
-                {{ image.roverText }}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div class="md:w-1/2">
+        <ImageGrid
+          :images="selectedImages"
+          cameraName="camera name"
+          roverText="rover text"
+        />
         <div class="flex space-x-4">
           <div class="md:hidden w-1/2">
             <NuxtLink to="/location">
@@ -86,7 +57,7 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 
 export default {
-  layout: "TestLayout",
+  layout: "flow",
 
   middleware({ store, redirect }) {
     if (

@@ -1,40 +1,24 @@
 <template>
   <div v-if="user" class="relative">
-    <div
-      v-if="showModal"
-      class="fixed flex w-screen h-screen z-10 items-center justify-center"
-    >
-      <div
+    <Modal :show="showModal" @close="showModal = false">
+      <h1 class="heading-bold">Delete report</h1>
+      <h2 class="mb-4">Are you sure you want to delete this report?</h2>
+      <button
         @click="showModal = false"
-        class="absolute w-full h-full bg-black opacity-30"
-      ></div>
-      <div class="relative w-1/3 h-auto bg-white rounded-md px-16 py-10 z-20">
-        <h1 class="heading-bold">Delete report</h1>
-        <h2 class="mb-4">Are you sure you want to delete this report?</h2>
-        <button
-          @click="showModal = false"
-          class="btn-secondary border-2 border-red-500 text-red-500"
-        >
-          Cancel
-        </button>
-        <button
-          @click="
-            deleteReport(deleteReportId);
-            showModal = false;
-          "
-          class="btn-primary bg-red-500 border-2 border-red-500"
-        >
-          Delete
-        </button>
-        <p
-          @click="showModal = false"
-          class="absolute top-2 right-4 cursor-pointer text-xl text-gray-400"
-        >
-          x
-        </p>
-      </div>
-    </div>
-
+        class="btn-secondary border-2 border-red-500 text-red-500"
+      >
+        Cancel
+      </button>
+      <button
+        @click="
+          deleteReport(deleteReportId);
+          showModal = false;
+        "
+        class="btn-primary bg-red-500 border-2 border-red-500"
+      >
+        Delete
+      </button>
+    </Modal>
     <div class="flex items-center justify-center pt-6">
       <h1 class="heading-1 mr-2">MRT™</h1>
       <img src="../assets/images/logo.png" class="w-auto h-10" alt="logo" />
@@ -78,7 +62,7 @@
             >
               <div class="flex">
                 <img
-                  :src="report.selectedImages[0].img"
+                  :src="report.selectedImages[0].img_src"
                   class="hidden sm:block w-12 h-12 object-cover rounded-md"
                   alt="report-img"
                 />
@@ -229,6 +213,7 @@ export default {
       this.userReports.sort((a, b) => {
         return new Date(b.missionDate) - new Date(a.missionDate);
       });
+
       return this.userReports;
     },
     userId: {
